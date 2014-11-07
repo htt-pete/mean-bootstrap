@@ -6,7 +6,7 @@
     <!-- CSS goes here -->
     <link rel="stylesheet" href="build/main.css">
 </head>
-<body>
+<body ng-app="coApp">
 
     <!-- NAVIGATION -->
     <nav class="navbar navbar-inverse" role="navigation">
@@ -17,6 +17,11 @@
 
     <div class="jumbotron text-center">
         <h1>MEAN Stack ready</h1>
+    </div>
+
+    <div class="container" ng-controller="TestCtrl as testCtrl">
+        <alert ng-repeat="alert in testCtrl.alerts" type="{{alert.type}}" close="testCtrl.closeAlert($index)">{{alert.msg}}</alert>
+        <p>dcs</p>
     </div>
 
 <!-- dependencies goes here -->

@@ -28,7 +28,6 @@ module.exports = function (app, router) {
     router
         .route('/example')
         .get(function(req, res){
-            res.send('example');
         });
 
 
