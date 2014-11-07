@@ -7,16 +7,26 @@ var jshint = require('gulp-jshint');
 var sass = require('gulp-sass');
 var nodemon = require('gulp-nodemon');
 var path = require('path');
+var uglify = require('gulp-uglify');
+var concat = require('gulp-concat');
+var plumber = require('gulp-plumber');
 
 var paths = {
     server: {
         js: 'server/**/*.js',
-        start: 'server/api.js'
+        start: 'server/app.js'
     },
     client: {
         js: './public/dev/js/**/*.js',
         sass: './public/dev/sass/**/*.scss',
-        css: './public/build/css'
+        css: './public/build',
+        compress: [
+            './public/dev/lib/angular/angular.js',
+            './public/dev/lib/angular-route/anugular-route.js',
+            './public/dev/lib/angular-bootstrap/ui-bootstrap-tpls.js',
+            './public/dev/js/**/*.js',
+            '!public/dev/js/views/**/*.js'
+        ]
     },
 }
 
@@ -28,10 +38,24 @@ gulp.task('clientLint', function() {
     return lint(paths.client.js);
 });
 
+/**
+ * compile SASS
+ */
 gulp.task('sass', function () {
     gulp.src(paths.client.sass)
         .pipe(sass())
-        .pipe(gulp.dest(paths.client.css));
+        .pipe(concat('main.css'))
+        .pipe(gulp.dest('./public/build'));
+});
+
+/**
+ * concat and minify all javascript files
+ */
+gulp.task('js-build', function() {
+    gulp.src(paths.client.compress)
+        .pipe(concat('app.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('./public/build'));
 });
 
 
@@ -70,7 +94,6 @@ function lint(lintSrc) {
  * Gulp task for running dev tools for server
  */
 gulp.task('server-dev', function() {
-
     nodemon({
         script: paths.server.start,
         ext: 'html js',
@@ -80,7 +103,6 @@ gulp.task('server-dev', function() {
     .on('restart', function () {
       console.log('restarted!')
     })
-  // gulp.watch([paths.server.js], ['server-lint']);
 });
 
 /**
@@ -88,9 +110,6 @@ gulp.task('server-dev', function() {
  * lint JS, compile JS, compile SASS etc
  */
 gulp.task('client-dev', function() {
-  gulp.watch([paths.client.js, paths.client.sass], ['clientLint', 'sass']);
-});
-
-gulp.task('client-lint', function() {
   gulp.watch([paths.client.js], ['clientLint']);
+  gulp.watch([paths.client.sass], ['sass']);
 });
