@@ -14,9 +14,9 @@ var paths = {
         start: 'server/api.js'
     },
     client: {
-        js: './public/assets/js/**/*.js',
-        sass: './public/assets/sass/**/*.scss',
-        css: './public/assets/css'
+        js: './public/dev/js/**/*.js',
+        sass: './public/dev/sass/**/*.scss',
+        css: './public/build/css'
     },
 }
 
