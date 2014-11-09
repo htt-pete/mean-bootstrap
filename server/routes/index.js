@@ -3,20 +3,15 @@
  * Set all routes for API on the app object using the Router object
  */
 module.exports = function (app, router) {
+    // set up auth routes
+    app = require('./auth')(app);
 
-    // auth routes
-    app
-    .route('/auth/login')
-    .post(function(req,res){
-        res.send('hello world');
-    });
 
-    app
-    .route('/auth/register')
-    .post(function(req, res){
-        res.send('boolean');
-    });
-
+    /**
+     * Middle ware to check for token to authenticate user
+     *
+     * sets req.user to user object if token is valid
+     */
     router.use(function(req, res, next) {
 
         // check token
