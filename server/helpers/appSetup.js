@@ -8,6 +8,10 @@ var config = require('./../config');
 
 var express = require('express');
 
+var fileUpload  = require('./fileUpload.js');
+
+var config = require('./../config');
+
 /**
  * Sets middleware and properties for the app
  * @param  {object} app - app object to attach middleware to
@@ -15,8 +19,10 @@ var express = require('express');
  */
 module.exports =  function(app) {
 
+    // create uploads directory if needed
+    fileUpload.checkExists([__dirname + config.upload.uploadsDir, __dirname + config.upload.tmpDir]);
     // set path of HTML,CSS,JS
-    app.use(express.static(__dirname + './../../public'));
+    app.use(express.static(__dirname + config.publicDir));
 
     // setup logging
     app.use(morgan('dev'));
